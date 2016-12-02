@@ -31,6 +31,16 @@ namespace Snake
         
         //----------------------------------------------------------------------------
 
+        public int Kierunek
+        {
+            get
+            {
+                return kierunek;
+            }
+        }
+
+        //--------------------------------------------------------------------------
+
         public List<Vector2> Poleznia()
         {
             List<Vector2> zwracnie = new List<Vector2>();
@@ -117,7 +127,7 @@ namespace Snake
                 }
                 else
                 {
-                    DrawMiddleUpDown(second.Y + 64, first.Y, first.X, spriteBatch);
+                    DrawMiddleUpDown(first.Y + 64, second.Y, first.X, spriteBatch);
                 }
             }
         }
@@ -132,22 +142,22 @@ namespace Snake
                 {
                     if (second.Y > third.Y)
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White);
+                        spriteBatch.Draw(zakret, second, null, Color.White, 1f * Pi, new Vector2(64,64), 1f, SpriteEffects.None, 0f);//tick
                     }
                     else
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White);
+                        spriteBatch.Draw(zakret, second, null, Color.White, 0.5f * Pi, new Vector2(0,64), 1f, SpriteEffects.None, 0f);//tick
                     }
                 }
                 else
                 {
                     if (second.Y > third.Y)
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White);
+                        spriteBatch.Draw(zakret, second, null, Color.White, 1.5f * Pi, new Vector2(64, 0), 1f, SpriteEffects.None, 0f);//tick
                     }
                     else
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White);
+                        spriteBatch.Draw(zakret, second, null, Color.White);//tick
                     }
                 }
             }
@@ -157,22 +167,22 @@ namespace Snake
                 {
                     if (second.X < third.X)
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White);
+                        spriteBatch.Draw(zakret, second, null, Color.White, 1.5f * Pi, new Vector2(64, 0), 1f, SpriteEffects.None, 0f);
                     }
                     else
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White, 1.5f * Pi, new Vector2(), 1f, SpriteEffects.None, 0f);
+                        spriteBatch.Draw(zakret, second, null, Color.White, 1f * Pi, new Vector2(64, 64), 1f, SpriteEffects.None, 0f);//tick
                     }
                 }
                 else
                 {
                     if (second.X < third.X)
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White);
+                        spriteBatch.Draw(zakret, second, null, Color.White);//tick
                     }
                     else
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White, 1.5f * Pi, new Vector2(64, 0), 1f, SpriteEffects.None, 0f);
+                        spriteBatch.Draw(zakret, second, null, Color.White, 0.5f * Pi, new Vector2(0, 64), 1f, SpriteEffects.None, 0f);//tick
                     }
                 }
             }
@@ -317,17 +327,17 @@ namespace Snake
                             }
                             else
                             {
-                                if (polozenieZakretow[polozenieZakretow.Count - 1].Y < polozenieOgona.Y)//zakert po prawej stronie ogona
-                                {
-                                    rotacjaOgona = 0f;
-                                    obrotOgona = new Vector2(0, 0);
-                                    kierunekOgona = 1;
-                                }
-                                else                                                                 //zakret po lewej stronie ogona
+                                if (polozenieZakretow[polozenieZakretow.Count - 1].X < polozenieOgona.X)//zakert po prawej stronie ogona
                                 {
                                     rotacjaOgona = Pi;
                                     obrotOgona = new Vector2(64, 64);
-                                    kierunekOgona = 2;
+                                    kierunekOgona = 4;
+                                }
+                                else                                                                 //zakret po lewej stronie ogona
+                                {
+                                    rotacjaOgona = 0f;
+                                    obrotOgona = new Vector2(0, 0);
+                                    kierunekOgona = 3;
                                 }
                             }
 
@@ -352,17 +362,17 @@ namespace Snake
                             }
                             else
                             {
-                                if (polozenieZakretow[polozenieZakretow.Count - 1].Y < polozenieOgona.Y)//zakert po prawej stronie ogona
-                                {
-                                    rotacjaOgona = 0f;
-                                    obrotOgona = new Vector2(0, 0);
-                                    kierunekOgona = 1;
-                                }
-                                else                                                                 //zakret po lewej stronie ogona
+                                if (polozenieZakretow[polozenieZakretow.Count - 1].X < polozenieOgona.X)//zakert po prawej stronie ogona
                                 {
                                     rotacjaOgona = Pi;
                                     obrotOgona = new Vector2(64, 64);
-                                    kierunekOgona = 2;
+                                    kierunekOgona = 4;
+                                }
+                                else                                                                 //zakret po lewej stronie ogona
+                                {
+                                    rotacjaOgona = 0f;
+                                    obrotOgona = new Vector2(0, 0);
+                                    kierunekOgona = 3;
                                 }
                             }
 
@@ -413,7 +423,7 @@ namespace Snake
                         if (polozenieZakretow[polozenieZakretow.Count - 1].X == polozenieOgona.X - 64)
                         {
                             polozenieZakretow.RemoveAt(polozenieZakretow.Count - 1);
-                            polozenieOgona.X += 64;
+                            polozenieOgona.X -= 64;
                             if (polozenieZakretow.Count == 0)
                             {
                                 obrotOgona = obrotGlowy;

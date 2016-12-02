@@ -98,7 +98,6 @@ namespace Snake
 
             spriteBatch.Begin();
             silnik.Draw();
-            //spriteBatch.DrawString();
             spriteBatch.End();
             base.Draw(gameTime);
         }

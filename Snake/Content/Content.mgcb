@@ -61,18 +61,6 @@
 /processorParam:TextureFormat=Color
 /build:zakret1.png
 
-#begin zakret2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:zakret2.png
-
 #begin srodek.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -115,10 +115,47 @@ namespace Snake
             {
                 if(IsPaused==true && Zdarzenie.CzyWSciane(waz.GlowaPolozenie)==false )
                 {
-                    waz.Move();
-                    
+                    int kierunek = SnakeControl();
+                    if(waz.Kierunek == kierunek)
+                    {
+                        waz.Move();
+                    }
+                    else
+                    {
+                        waz.ChangeDirection(kierunek);
+                    }
                 }
+                if(Zdarzenie.CzyWSciane(waz.GlowaPolozenie) == true || Zdarzenie.CzyWSiebie(waz.Poleznia()) == true)
+                {
+                    czyMenu = true;
+                }
+                //if(Zdarzenie.CzyJablko(waz.GlowaPolozenie,jablko.ApplePosition) == true)
+                //{
+                //    waz.Add();
+                //}
             }
+        }
+
+        public int SnakeControl()
+        {
+            ////1-gora 2-dol 3-prawo 4-lewo
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && waz.Kierunek != 1 && waz.Kierunek != 2)
+            {
+                return 1;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Down) && waz.Kierunek != 1 && waz.Kierunek != 2)
+            {
+                return 2;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) && waz.Kierunek != 3 && waz.Kierunek != 4)
+            {
+                return 3;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) && waz.Kierunek != 4 && waz.Kierunek != 3)
+            {
+                return 4;
+            }
+            return waz.Kierunek;
         }
 
         public void Draw()
