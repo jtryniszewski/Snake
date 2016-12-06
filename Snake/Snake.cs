@@ -49,7 +49,6 @@ namespace Snake
             {
                 zwracnie.Add(polozenieZakretow[i]);
             }
-            zwracnie.Add(polozenieGlowy);
             return zwracnie;
         }
 
@@ -496,16 +495,16 @@ namespace Snake
             switch (kierunekOgona)
             {
                 case 1:
-                    polozenieOgona.Y -= 64;
+                    polozenieOgona.Y += 64;
                     break;
                 case 2:
-                    polozenieOgona.Y+=64;
+                    polozenieOgona.Y-=64;
                     break;
                 case 3:
-                    polozenieOgona.X+=64;
+                    polozenieOgona.X-=64;
                     break;
                 case 4:
-                    polozenieOgona.X-=64;
+                    polozenieOgona.X+=64;
                     break;
             }
         }

@@ -29,71 +29,58 @@ namespace Snake
             }
             return false;
         }
-        static public bool CzyWSiebie(List<Vector2> polozenia)
+        static public bool CzyWSiebie(List<Vector2> polozenia,Vector2 glowa)
         {
-            if (polozenia.Count == 2)
+            bool zwracanie = false;
+            if(polozenia.Count<=3)
             {
-                return false;
+                zwracanie = false;
             }
             else
             {
-                for(int i = polozenia.Count-1;i>1;i--)
+                for(int i = 0;i<polozenia.Count-2;i++)
                 {
-                    if(polozenia[i].Y==polozenia[i-1].Y)
+                    #region Y==Y
+                    if(polozenia[i].Y == polozenia[i+1].Y)
                     {
-                        #region Y==Y
-                        if(polozenia[i].X<polozenia[i-1].X)
+                        if(polozenia[i].X<polozenia[i + 1].X)
                         {
-                            if (polozenia[0].Y >= polozenia[i].Y - 64 && polozenia[0].Y <= polozenia[i].Y + 64 && polozenia[0].X >= polozenia[i].X && polozenia[0].X <= polozenia[i - 1].X)
+                            if((glowa.Y > polozenia[i].Y - 63f && glowa.Y < polozenia[i].Y + 63f) && (glowa.X > polozenia[i].X - 63f && glowa.X < polozenia[i + 1].X + 63f))
                             {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
+                                zwracanie= true;
                             }
                         }
                         else
                         {
-                            if (polozenia[0].Y >= polozenia[i].Y - 64 && polozenia[0].Y <= polozenia[i].Y + 64 && polozenia[0].X >= polozenia[i-1].X && polozenia[0].X <= polozenia[i].X)
+                            if ((glowa.Y > polozenia[i].Y - 63f && glowa.Y < polozenia[i].Y + 63f) && (glowa.X > polozenia[i + 1].X - 63f && glowa.X < polozenia[i].X + 63f))
                             {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
+                                zwracanie =true;
                             }
                         }
-                        #endregion
                     }
+                    #endregion
+                    #region X==X
                     else
                     {
-                        if(polozenia[i].Y<polozenia[i-1].Y)
+                        if(polozenia[i].Y<polozenia[i + 1].Y)
                         {
-                            if (polozenia[0].Y >= polozenia[i].Y - 64 && polozenia[0].Y <= polozenia[i-1].Y + 64 && polozenia[0].X >= polozenia[i].X && polozenia[0].X <= polozenia[i].X)
+                            if ((glowa.Y > polozenia[i].Y - 63f && glowa.Y < polozenia[i + 1].Y + 63f) && (glowa.Y > polozenia[i].Y - 63f && glowa.X < polozenia[i + 1].Y + 63f))
                             {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
+                                zwracanie= true;
                             }
                         }
                         else
                         {
-                            if (polozenia[0].Y >= polozenia[i - 1].Y - 64 && polozenia[0].Y <= polozenia[i].Y + 64 && polozenia[0].X >= polozenia[i].X && polozenia[0].X <= polozenia[i].X)
+                            if ((glowa.Y > polozenia[i + 1].Y - 63f && glowa.Y < polozenia[i].Y + 63f) && (glowa.X > polozenia[i].X - 63f && glowa.X < polozenia[i].X + 63f))
                             {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
+                                zwracanie = true;
                             }
                         }
                     }
+                    #endregion
                 }
             }
-            return false;
+            return zwracanie;
         }
         static public bool CzyJablko(Vector2 waz, Vector2 jablko)
         {

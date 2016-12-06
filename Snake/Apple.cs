@@ -37,7 +37,7 @@ namespace Snake
 
         //-----------------------------------------------------------
 
-        public bool Sprawdzenie(Vector2 first, Vector2 second, Vector2 check)
+        private bool Sprawdzenie(Vector2 first, Vector2 second, Vector2 check)
         {
             if(first.Y == second.Y)
             {

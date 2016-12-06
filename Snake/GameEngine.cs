@@ -19,17 +19,14 @@ namespace Snake
         bool IsPaused = true;
         bool IsMusic = true;
         public SpriteBatch spriteBatch;
-        private int kierunekTeraz;
-        private int kierunekNowy;
         private TimeSpan czas;
         private Menu menu;
         private bool czyMenu;
-        private GraphicsDeviceManager graphics;
-        private Texture2D jablkoTextura;
         private ContentManager contentManager;
         public SpriteFont font;
         private Snake waz;
         private Apple jablko;
+        private int ii = 0;
 
         //--------------------------------------------------------------------------------------------
 
@@ -113,26 +110,34 @@ namespace Snake
             }
             else
             {
-                if(IsPaused==true && Zdarzenie.CzyWSciane(waz.GlowaPolozenie)==false )
+                if(IsPaused==true && Zdarzenie.CzyWSciane(waz.GlowaPolozenie) == false && Zdarzenie.CzyWSiebie(waz.Poleznia(),waz.GlowaPolozenie) == false)
                 {
                     int kierunek = SnakeControl();
-                    if(waz.Kierunek == kierunek)
-                    {
-                        waz.Move();
-                    }
-                    else
+                    waz.Move();
+                    if (waz.Kierunek != kierunek)
                     {
                         waz.ChangeDirection(kierunek);
                     }
+                    //    if(ii%2==0)
+                    //    {
+                    //        waz.ChangeDirection(1);
+                    //    }
+                    //    else
+                    //    {
+                    //        waz.ChangeDirection(3);
+                    //    }
+                    //ii++;
+                    //waz.Move();
                 }
-                if(Zdarzenie.CzyWSciane(waz.GlowaPolozenie) == true || Zdarzenie.CzyWSiebie(waz.Poleznia()) == true)
+                if (Zdarzenie.CzyWSciane(waz.GlowaPolozenie) == true || Zdarzenie.CzyWSiebie(waz.Poleznia(),waz.GlowaPolozenie) == true)
                 {
-                    czyMenu = true;
+                    czyMenu = false;
                 }
-                //if(Zdarzenie.CzyJablko(waz.GlowaPolozenie,jablko.ApplePosition) == true)
-                //{
-                //    waz.Add();
-                //}
+                if (Zdarzenie.CzyJablko(waz.GlowaPolozenie, jablko.ApplePosition) == true)
+                {
+                    waz.Add();
+                    jablko.RandomPositionApple(waz.Poleznia());
+                }
             }
         }
 
