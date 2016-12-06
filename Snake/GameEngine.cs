@@ -118,16 +118,6 @@ namespace Snake
                     {
                         waz.ChangeDirection(kierunek);
                     }
-                    //    if(ii%2==0)
-                    //    {
-                    //        waz.ChangeDirection(1);
-                    //    }
-                    //    else
-                    //    {
-                    //        waz.ChangeDirection(3);
-                    //    }
-                    //ii++;
-                    //waz.Move();
                 }
                 if (Zdarzenie.CzyWSciane(waz.GlowaPolozenie) == true || Zdarzenie.CzyWSiebie(waz.Poleznia(),waz.GlowaPolozenie) == true)
                 {
