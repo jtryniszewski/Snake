@@ -109,8 +109,8 @@ namespace Snake
         
         public void RandomPositionApple(List<Vector2> polozenieWeza)
         {
-            polozenieJablka.X = random.Next(0, 1296);
-            polozenieJablka.Y = random.Next(0, 704);
+            polozenieJablka.X = 40 + 64f * random.Next(0, 20);
+            polozenieJablka.Y = 32 + 64f * random.Next(0, 11);
             for(int i = polozenieWeza.Count-1;i>0;i--)
             {
                 if(Sprawdzenie(polozenieWeza[i],polozenieWeza[i-1],polozenieJablka) == false)

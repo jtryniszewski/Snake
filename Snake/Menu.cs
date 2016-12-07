@@ -14,7 +14,6 @@ namespace Snake
     {
         public List<GUIElement> main = new List<GUIElement>();
         public GameEngine silnik;
-        public ContentManager content;
 
         public Menu(GameEngine silnik, List<GUIElement>elementsList)
         {

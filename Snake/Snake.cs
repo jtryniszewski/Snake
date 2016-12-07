@@ -29,7 +29,7 @@ namespace Snake
         private float rotacjaGlowy;
         #endregion
         
-        //----------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
 
         public int Kierunek
         {
@@ -39,7 +39,7 @@ namespace Snake
             }
         }
 
-        //--------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
 
         public List<Vector2> Poleznia()
         {
@@ -52,7 +52,7 @@ namespace Snake
             return zwracnie;
         }
 
-        //------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
 
         public Vector2 GlowaPolozenie
         {
@@ -61,49 +61,53 @@ namespace Snake
                 return polozenieGlowy;
             }
         }
-        public Snake(ContentManager content)
+
+        //-----------------------------------------------------------------------------------------------
+
+        public Snake(ContentManager content)//konstruktor pobiera tylko content
         {
             this.content = content;
-            kierunek = 3;
-            kierunekOgona = kierunek;
         }
-        //-----------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
 
-        public void Initialize()
+        public void Initialize()//przygotowanie klasy do rozpoczecia gry
         {
             head = content.Load<Texture2D>("glowa");
             ogon = content.Load<Texture2D>("ogon");
-            srodek = content.Load<Texture2D>("srodek1");
+            srodek = content.Load<Texture2D>("srodek");
             zakret = content.Load<Texture2D>("zakret1");
             polozenieZakretow = new List<Vector2>();
-            polozenieGlowy = new Vector2(512f, 428f);
-            polozenieOgona = new Vector2(384f, 428f);
             rotacjaGlowy = 0f;
             rotacjaOgona = 0f;
             obrotGlowy = new Vector2(0f, 0f);
             obrotOgona = new Vector2(0f, 0f);
+            polozenieGlowy = new Vector2(680, 352);
+            polozenieOgona = new Vector2(552, 352);
+            kierunek = 3;
+            kierunekOgona = kierunek;
         }
 
-        //------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
+
         private void DrawMiddleRightLeft(float first, float second, float y, SpriteBatch spriteBatch)
         {
-            for (int i = (int)first; i <= second; i++)
+            for (int i = (int)first; i < second; i+=64)
             {
                 spriteBatch.Draw(srodek, new Vector2(i, y), Color.White);
             }
         }
 
-        //-------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
 
         private void DrawMiddleUpDown(float first, float second, float x, SpriteBatch spriteBatch)
         {
-            for (int i = (int)first; i <= second; i++)
+            for (int i = (int)first; i < second; i+=64)
             {
-                spriteBatch.Draw(srodek, new Vector2(x, i), null, Color.White, 1.5f * Pi, new Vector2(), 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(srodek, new Vector2(x, i), null, Color.White, 1.5f * Pi, new Vector2(64,0), 1f, SpriteEffects.None, 0f);
             }
         }
 
-        //-------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
 
         private void DrawBettwenCorner(Vector2 first, Vector2 second, SpriteBatch spriteBatch)
         {
@@ -131,7 +135,7 @@ namespace Snake
             }
         }
 
-        //-------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
 
         private void DrawTurns(Vector2 first, Vector2 second, Vector2 third, SpriteBatch spriteBatch)
         {
@@ -141,11 +145,11 @@ namespace Snake
                 {
                     if (second.Y > third.Y)
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White, 1f * Pi, new Vector2(64,64), 1f, SpriteEffects.None, 0f);//tick
+                        spriteBatch.Draw(zakret, second, null, Color.White, 1f * Pi, new Vector2(64, 64), 1f, SpriteEffects.None, 0f);//tick
                     }
                     else
                     {
-                        spriteBatch.Draw(zakret, second, null, Color.White, 0.5f * Pi, new Vector2(0,64), 1f, SpriteEffects.None, 0f);//tick
+                        spriteBatch.Draw(zakret, second, null, Color.White, 0.5f * Pi, new Vector2(0, 64), 1f, SpriteEffects.None, 0f);//tick
                     }
                 }
                 else
@@ -187,7 +191,7 @@ namespace Snake
             }
         }
 
-        //-------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -255,69 +259,85 @@ namespace Snake
             #endregion
         }
 
-        //-----------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------
 
-        public void Move()//1-gora 2-dol 3-prawo 4-lewo
+        private bool HeadMove(int distance)//przemieszcza glowe o dany dystans
         {
-            #region zmiana polozenia glowy
             switch (kierunek)
             {
                 case 1:
+                    if (polozenieGlowy.Y - 64 < 32) { return true; }
+                    if (CzyWSiebie(polozenieGlowy) == true) { return true; }
                     rotacjaGlowy = 1.5f * Pi;
                     obrotGlowy = new Vector2(64, 0);
-                    polozenieGlowy.Y--;
+                    polozenieGlowy.Y -= distance;
                     break;
                 case 2:
+                    if (polozenieGlowy.Y + 64 > 672) { return true; }
+                    if (CzyWSiebie(polozenieGlowy) == true) { return true; }
                     rotacjaGlowy = 0.5f * Pi;
                     obrotGlowy = new Vector2(0, 64);
-                    polozenieGlowy.Y++;
+                    polozenieGlowy.Y += distance;
                     break;
                 case 3:
+                    if (polozenieGlowy.X + 64 > 1256) { return true; }
+                    if (CzyWSiebie(polozenieGlowy) == true) { return true; }
                     rotacjaGlowy = 0f;
                     obrotGlowy = new Vector2(0, 0);
-                    polozenieGlowy.X++;
+                    polozenieGlowy.X += distance;
                     break;
                 case 4:
+                    if (polozenieGlowy.X - 64 < 40) { return true; }
+                    if (CzyWSiebie(polozenieGlowy) == true) { return true; }
                     rotacjaGlowy = Pi;
                     obrotGlowy = new Vector2(64, 64);
-                    polozenieGlowy.X--;
+                    polozenieGlowy.X -= distance;
                     break;
             }
-            #endregion
-            #region zmiana polozenia ogona jesli nie ma zakretow
-            if (polozenieZakretow.Count == 0)
-            {
-                switch (kierunek)
-                {
-                    case 1:
-                        polozenieOgona.Y--;
-                        break;
-                    case 2:
-                        polozenieOgona.Y++;
-                        break;
-                    case 3:
-                        polozenieOgona.X++;
-                        break;
-                    case 4:
-                        polozenieOgona.X--;
-                        break;
-                }
-                obrotOgona = obrotGlowy;
-                rotacjaOgona = rotacjaGlowy;
-                kierunekOgona = kierunek;
-            }
-            #endregion
-            #region zmiana kierunku ogona plus modifikacja listy zakretow
-            else
+            return false;
+        }
+
+        //------------------------------------------------------------------------------------------------
+
+        private void TailMove(int distance)//przemieszcza ogona o dany dystans
+        {
+            if(polozenieZakretow.Count == 0)
             {
                 switch (kierunekOgona)
                 {
                     case 1:
+                        rotacjaOgona = 1.5f * Pi;
+                        obrotOgona = new Vector2(64, 0);
+                        polozenieOgona.Y -= distance;
+                        break;
+                    case 2:
+                        rotacjaOgona = 0.5f * Pi;
+                        obrotOgona = new Vector2(0, 64);
+                        polozenieOgona.Y += distance;
+                        break;
+                    case 3:
+                        rotacjaOgona = 0f;
+                        obrotOgona = new Vector2(0, 0);
+                        polozenieOgona.X += distance;
+                        break;
+                    case 4:
+                        rotacjaOgona = Pi;
+                        obrotOgona = new Vector2(64, 64);
+                        polozenieOgona.X -= distance;
+                        break;
+                }
+            }
+            else
+            {
+                #region przemieszczania ogona po zakretach
+                switch (kierunekOgona)
+                {
+                    case 1:
                         #region 
-                        if (polozenieZakretow[polozenieZakretow.Count - 1].Y == polozenieOgona.Y - 64)
+                        if (polozenieZakretow[polozenieZakretow.Count - 1].Y >= polozenieOgona.Y - 64)
                         {
+                            polozenieOgona = polozenieZakretow[polozenieZakretow.Count - 1];
                             polozenieZakretow.RemoveAt(polozenieZakretow.Count - 1);
-                            polozenieOgona.Y -= 64;
                             if (polozenieZakretow.Count == 0)
                             {
                                 obrotOgona = obrotGlowy;
@@ -343,16 +363,16 @@ namespace Snake
                         }
                         else
                         {
-                            polozenieOgona.Y--;
+                            polozenieOgona.Y -= 64;
                         }
                         #endregion
                         break;
                     case 2:
                         #region 
-                        if (polozenieZakretow[polozenieZakretow.Count - 1].Y == polozenieOgona.Y + 64)
+                        if (polozenieZakretow[polozenieZakretow.Count - 1].Y <= polozenieOgona.Y + 64)
                         {
+                            polozenieOgona = polozenieZakretow[polozenieZakretow.Count - 1];
                             polozenieZakretow.RemoveAt(polozenieZakretow.Count - 1);
-                            polozenieOgona.Y += 64;
                             if (polozenieZakretow.Count == 0)
                             {
                                 obrotOgona = obrotGlowy;
@@ -378,16 +398,16 @@ namespace Snake
                         }
                         else
                         {
-                            polozenieOgona.Y++;
+                            polozenieOgona.Y += 64;
                         }
                         #endregion
                         break;
                     case 3:
                         #region 
-                        if (polozenieZakretow[polozenieZakretow.Count - 1].X == polozenieOgona.X + 64)
+                        if (polozenieZakretow[polozenieZakretow.Count - 1].X <= polozenieOgona.X + 64)
                         {
+                            polozenieOgona = polozenieZakretow[polozenieZakretow.Count - 1];
                             polozenieZakretow.RemoveAt(polozenieZakretow.Count - 1);
-                            polozenieOgona.X += 64;
                             if (polozenieZakretow.Count == 0)
                             {
                                 obrotOgona = obrotGlowy;
@@ -413,16 +433,16 @@ namespace Snake
                         }
                         else
                         {
-                            polozenieOgona.X++;
+                            polozenieOgona.X += 64;
                         }
                         #endregion
                         break;
                     case 4:
                         #region 
-                        if (polozenieZakretow[polozenieZakretow.Count - 1].X == polozenieOgona.X - 64)
+                        if (polozenieZakretow[polozenieZakretow.Count - 1].X >= polozenieOgona.X - 64)
                         {
+                            polozenieOgona = polozenieZakretow[polozenieZakretow.Count - 1];
                             polozenieZakretow.RemoveAt(polozenieZakretow.Count - 1);
-                            polozenieOgona.X -= 64;
                             if (polozenieZakretow.Count == 0)
                             {
                                 obrotOgona = obrotGlowy;
@@ -448,66 +468,116 @@ namespace Snake
                         }
                         else
                         {
-                            polozenieOgona.X--;
+                            polozenieOgona.X -= 64;
                         }
                         #endregion
                         break;
                 }
+                #endregion
             }
-            #endregion
         }
 
-        //-----------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------
 
-        public void ChangeDirection(int kierunek)//1-gora 2-dol 3-prawo 4-lewo
+        public bool Move()
         {
-            polozenieZakretow.Insert(0, polozenieGlowy);
-            switch (kierunek)
+            bool zwroc = HeadMove(64);
+            if(zwroc == false)
             {
-                case 1:
-                    rotacjaGlowy = 1.5f * Pi;
-                    obrotGlowy = new Vector2(64, 0);
-                    polozenieGlowy.Y -= 63;
-                    break;
-                case 2:
-                    rotacjaGlowy = 0.5f * Pi;
-                    obrotGlowy = new Vector2(0, 64);
-                    polozenieGlowy.Y += 63;
-                    break;
-                case 3:
-                    rotacjaGlowy = 0f;
-                    obrotGlowy = new Vector2(0, 0);
-                    polozenieGlowy.X += 63;
-                    break;
-                case 4:
-                    rotacjaGlowy = Pi;
-                    obrotGlowy = new Vector2(64, 64);
-                    polozenieGlowy.X -= 63;
-                    break;
+                TailMove(64);
             }
-            this.kierunek = kierunek;
+            return zwroc;
         }
 
-        //------------------------------------------------------------------------
 
-        public void Add()//przedluzenie snaka po zjedzeniu jablko
+        //-------------------------------------------------------------------------------------------------
+
+        public bool ChangeDirection(int kierunek)
         {
-            switch (kierunekOgona)
+            Vector2 temp = polozenieGlowy;
+            this.kierunek = kierunek;
+            bool zwroc = HeadMove(64);
+            if(zwroc == false)
+            {
+                polozenieZakretow.Insert(0, temp);
+                TailMove(64);
+            }
+            return zwroc;
+        }
+
+        //-------------------------------------------------------------------------------------------------
+
+        public void Add()
+        {
+            switch(kierunekOgona)
             {
                 case 1:
                     polozenieOgona.Y += 64;
                     break;
                 case 2:
-                    polozenieOgona.Y-=64;
+                    polozenieOgona.Y -= 64;
                     break;
                 case 3:
-                    polozenieOgona.X-=64;
+                    polozenieOgona.X -= 64;
                     break;
                 case 4:
-                    polozenieOgona.X+=64;
+                    polozenieOgona.X += 64;
                     break;
             }
         }
 
+        //-------------------------------------------------------------------------------------------------
+
+        private bool CzyWSiebie(Vector2 glowa)
+        {
+            switch (kierunek)
+            {
+                case 1:
+                    glowa.Y -= 64;
+                    break;
+                case 2:
+                    glowa.Y += 64;
+                    break;
+                case 3:
+                    glowa.X += 64;
+                    break;
+                case 4:
+                    glowa.X -= 64;
+                    break;
+            }
+            if (polozenieZakretow.Count < 3)
+            {
+                return false;
+            }
+            else
+            {
+                for (int i = polozenieZakretow.Count - 1; i > 0; i--)
+                {
+                    if (i == polozenieZakretow.Count - 1)
+                    {
+                        if (polozenieOgona.X == polozenieZakretow[i].X && polozenieOgona.X == glowa.X)
+                        {
+                            if ((((polozenieOgona.Y + 30) - glowa.Y) > 0 && (polozenieZakretow[i].Y - (glowa.Y + 30)) < 0) || ((polozenieOgona.Y - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].Y + 30) - glowa.Y) > 0)) { return true; }
+                        }
+                        if (polozenieOgona.Y == polozenieZakretow[i].Y && polozenieOgona.Y == glowa.Y)
+                        {
+                            if ((((polozenieOgona.X + 30) - glowa.X) > 0 && (polozenieZakretow[i].X - (glowa.X + 30)) < 0) || ((polozenieOgona.X - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].X + 30) - glowa.X) > 0)) { return true; }
+                        }
+                    }
+                    else
+                    {
+                        if (polozenieZakretow[i + 1].X == polozenieZakretow[i].X && polozenieZakretow[i + 1].X == glowa.X)
+                        {
+                            if ((((polozenieZakretow[i + 1].Y + 30) - glowa.Y) > 0 && (polozenieZakretow[i].Y - (glowa.Y + 30)) < 0) || ((polozenieZakretow[i + 1].Y - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].Y + 30) - glowa.Y) > 0)) { return true; }
+                        }
+                        if (polozenieZakretow[i + 1].Y == polozenieZakretow[i].Y && polozenieZakretow[i + 1].Y == glowa.Y)
+                        {
+                            if ((((polozenieZakretow[i + 1].X + 30) - glowa.X) > 0 && (polozenieZakretow[i].X - (glowa.X + 30)) < 0) || ((polozenieZakretow[i + 1].X - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].X + 30) - glowa.X) > 0)) { return true; }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

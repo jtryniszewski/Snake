@@ -18,6 +18,7 @@ namespace Snake
     {
         bool IsPaused = true;
         bool IsMusic = true;
+        bool IsGameOver = false;
         public SpriteBatch spriteBatch;
         private TimeSpan czas;
         private Menu menu;
@@ -26,9 +27,23 @@ namespace Snake
         public SpriteFont font;
         private Snake waz;
         private Apple jablko;
-        private int ii = 0;
+        private Texture2D Tlo_Gry;
+        int kierunek;
 
         //--------------------------------------------------------------------------------------------
+        #region metody statyczne
+        static public bool CzyJablko(Vector2 waz, Vector2 jablko)
+        {
+            if (waz.X == jablko.X && jablko.Y == waz.Y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
 
         #region Menu Listy
 
@@ -110,20 +125,35 @@ namespace Snake
             }
             else
             {
-                if(IsPaused==true && Zdarzenie.CzyWSciane(waz.GlowaPolozenie) == false && Zdarzenie.CzyWSiebie(waz.Poleznia(),waz.GlowaPolozenie) == false)
+                if(IsPaused==true && IsGameOver == false)
                 {
-                    int kierunek = SnakeControl();
-                    waz.Move();
+                    kierunek = SnakeControl();
                     if (waz.Kierunek != kierunek)
                     {
-                        waz.ChangeDirection(kierunek);
+                        if(czas.Milliseconds %1500==0)
+                        {
+                            if(waz.ChangeDirection(kierunek) == true /*|| waz.CzyWSiebie() == true*/)
+                            {
+                                IsGameOver = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (czas.Milliseconds % 1500 == 0)
+                        {
+                            if(waz.Move()==true /*|| waz.CzyWSiebie() == true*/)
+                            {
+                                IsGameOver = true;
+                            }
+                        }
                     }
                 }
-                if (Zdarzenie.CzyWSciane(waz.GlowaPolozenie) == true || Zdarzenie.CzyWSiebie(waz.Poleznia(),waz.GlowaPolozenie) == true)
+                if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
-                    czyMenu = false;
+                    IsPaused = false;
                 }
-                if (Zdarzenie.CzyJablko(waz.GlowaPolozenie, jablko.ApplePosition) == true)
+                if (CzyJablko(waz.GlowaPolozenie, jablko.ApplePosition) == true)
                 {
                     waz.Add();
                     jablko.RandomPositionApple(waz.Poleznia());
@@ -150,7 +180,7 @@ namespace Snake
             {
                 return 4;
             }
-            return waz.Kierunek;
+            return kierunek;
         }
 
         public void Draw()
@@ -161,16 +191,9 @@ namespace Snake
             }
             else
             {
+                spriteBatch.Draw(Tlo_Gry, new Rectangle(0, 0, 1360, 768), Color.White);
                 waz.Draw(spriteBatch);
                 jablko.Draw(spriteBatch);
-            }
-            if (czyMenu == false)
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                {
-
-                    IsPaused = false;
-                }
             }
             if (IsPaused == false)
             {
@@ -205,6 +228,8 @@ namespace Snake
             waz.Initialize();
             jablko = new Apple(contentManager);
             jablko.Inittialize(waz.Poleznia());
+            kierunek = 3;
+            IsGameOver = false;
         }
 
         public void ZMenuDoOpcji()
@@ -259,6 +284,7 @@ namespace Snake
             czyMenu = true;
             menu = new Menu(this, GetMainMenu());
             this.spriteBatch = spriteBatch;
+            Tlo_Gry = content.Load<Texture2D>("tlo_snake");
         }
         //---------------------------------------------------------------------
 
