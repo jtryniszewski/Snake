@@ -15,28 +15,28 @@ namespace Snake
         protected int x, y;
         private Texture2D GUITexture;
         private Rectangle GUIRect;
-        public readonly string WpisywanaNazwa;
+        public readonly string wpisywanaNazwa;
         private Action _metoda;
         public SpriteFont font;
-        protected int ElementHeight;
-        protected int ElementWidth;
+        protected int elementHeight;
+        protected int elementWidth;
         //public delegate void KliknietyElement(string element);
         //public event KliknietyElement klawisz;
-        public GUIElement(string WpisywanaNazwa,int x, int y, Action metoda, ContentManager content/*, int screenWidth, int screenHeight, */)
+        public GUIElement(string wpisywanaNazwa,int x, int y, Action metoda, ContentManager content/*, int screenWidth, int screenHeight, */)
         {
             
             
-            this.WpisywanaNazwa = WpisywanaNazwa;
+            this.wpisywanaNazwa = wpisywanaNazwa;
             this.x = x;
             this.y = y;
             this._metoda = metoda;
-            if (WpisywanaNazwa != null)
+            if (wpisywanaNazwa != null)
             {
-                GUITexture = content.Load<Texture2D>(WpisywanaNazwa);
-                ElementWidth = GUITexture.Width;
-                ElementHeight = GUITexture.Height;
+                GUITexture = content.Load<Texture2D>(wpisywanaNazwa);
+                elementWidth = GUITexture.Width;
+                elementHeight = GUITexture.Height;
             }
-            GUIRect = new Rectangle(0, 0, ElementWidth, ElementHeight);
+            GUIRect = new Rectangle(0, 0, elementWidth, elementHeight);
             Centrowanie(760, 1360);
             //ScaleToFitScreen(screenHeight, screenWidth);
             RuszanieEl(x, y);
@@ -63,7 +63,7 @@ namespace Snake
 
         private Rectangle GetRect(int height, int width)
         {
-            return new Rectangle((width / 2) - (ElementWidth / 2), (height / 2) - (ElementHeight / 2), ElementWidth, ElementHeight);
+            return new Rectangle((width / 2) - (elementWidth / 2), (height / 2) - (elementHeight / 2), elementWidth, elementHeight);
         }
 
         public void RuszanieEl(int x, int y)

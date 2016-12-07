@@ -16,9 +16,9 @@ namespace Snake
 {
     public class GameEngine
     {
-        bool IsPaused = true;
-        bool IsMusic = true;
-        bool IsGameOver = false;
+        bool isPause = true;
+        bool isMusic = true;
+        bool isGameOver = false;
         public SpriteBatch spriteBatch;
         private TimeSpan czas;
         private Menu menu;
@@ -27,7 +27,7 @@ namespace Snake
         public SpriteFont font;
         private Snake waz;
         private Apple jablko;
-        private Texture2D Tlo_Gry;
+        private Texture2D tlo_Gry;
         int kierunek;
 
         //--------------------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ namespace Snake
             }
             else
             {
-                if(IsPaused==true && IsGameOver == false)
+                if(isPause==true && isGameOver == false)
                 {
                     kierunek = SnakeControl();
                     if (waz.Kierunek != kierunek)
@@ -134,7 +134,7 @@ namespace Snake
                         {
                             if(waz.ChangeDirection(kierunek) == true /*|| waz.CzyWSiebie() == true*/)
                             {
-                                IsGameOver = true;
+                                isGameOver = true;
                             }
                         }
                     }
@@ -144,14 +144,14 @@ namespace Snake
                         {
                             if(waz.Move()==true /*|| waz.CzyWSiebie() == true*/)
                             {
-                                IsGameOver = true;
+                                isGameOver = true;
                             }
                         }
                     }
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
-                    IsPaused = false;
+                    isPause = false;
                 }
                 if (CzyJablko(waz.GlowaPolozenie, jablko.ApplePosition) == true)
                 {
@@ -191,11 +191,11 @@ namespace Snake
             }
             else
             {
-                spriteBatch.Draw(Tlo_Gry, new Rectangle(0, 0, 1360, 768), Color.White);
+                spriteBatch.Draw(tlo_Gry, new Rectangle(0, 0, 1360, 768), Color.White);
                 waz.Draw(spriteBatch);
                 jablko.Draw(spriteBatch);
             }
-            if (IsPaused == false)
+            if (isPause == false)
             {
                 waz.Draw(spriteBatch);
                 foreach (GUIElement element in GetPauseMenu())
@@ -214,12 +214,12 @@ namespace Snake
         public void PauseToMenu()
         {
             czyMenu = true;
-            IsPaused = true;
+            isPause = true;
         }
         public void Resume()
         {
             czyMenu = false;
-            IsPaused = true;
+            isPause = true;
         }
         public void ZmEnuDoGry()
         {
@@ -229,16 +229,16 @@ namespace Snake
             jablko = new Apple(contentManager);
             jablko.Inittialize(waz.Poleznia());
             kierunek = 3;
-            IsGameOver = false;
+            isGameOver = false;
         }
 
         public void ZMenuDoOpcji()
         {
-            if (IsMusic == true)
+            if (isMusic == true)
             {
                 menu = new Menu(this, GetOptionMenu());
             }
-            if(IsMusic == false)
+            if(isMusic == false)
             {
                 menu = new Menu(this, GetMusicOffMenu());
             }
@@ -252,14 +252,14 @@ namespace Snake
         {
             Thread.Sleep(200);
             MediaPlayer.Resume();
-            IsMusic = true;
+            isMusic = true;
             menu = new Menu(this, GetOptionMenu());
         }
         public void TurnOff()
         {
             Thread.Sleep(200);
             MediaPlayer.Pause();
-            IsMusic = false;
+            isMusic = false;
             menu = new Menu(this, GetMusicOffMenu());
         }
 
@@ -284,7 +284,7 @@ namespace Snake
             czyMenu = true;
             menu = new Menu(this, GetMainMenu());
             this.spriteBatch = spriteBatch;
-            Tlo_Gry = content.Load<Texture2D>("tlo_snake");
+            tlo_Gry = content.Load<Texture2D>("tlo_snake");
         }
         //---------------------------------------------------------------------
 
