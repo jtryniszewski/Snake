@@ -530,22 +530,7 @@ namespace Snake
 
         private bool CzyWSiebie(Vector2 glowa)
         {
-            switch (kierunek)
-            {
-                case 1:
-                    glowa.Y -= 64;
-                    break;
-                case 2:
-                    glowa.Y += 64;
-                    break;
-                case 3:
-                    glowa.X += 64;
-                    break;
-                case 4:
-                    glowa.X -= 64;
-                    break;
-            }
-            if (polozenieZakretow.Count < 3)
+            if (polozenieZakretow.Count < 2)
             {
                 return false;
             }
@@ -557,22 +542,26 @@ namespace Snake
                     {
                         if (polozenieOgona.X == polozenieZakretow[i].X && polozenieOgona.X == glowa.X)
                         {
-                            if ((((polozenieOgona.Y + 30) - glowa.Y) > 0 && (polozenieZakretow[i].Y - (glowa.Y + 30)) < 0) || ((polozenieOgona.Y - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].Y + 30) - glowa.Y) > 0)) { return true; }
+                            if ((((polozenieOgona.Y + 30) - glowa.Y) > 0 && (polozenieZakretow[i].Y - (glowa.Y + 30)) < 0)) { return true; }
+                            if(((polozenieOgona.Y - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].Y + 30) - glowa.Y) > 0)) { return true; }
                         }
                         if (polozenieOgona.Y == polozenieZakretow[i].Y && polozenieOgona.Y == glowa.Y)
                         {
-                            if ((((polozenieOgona.X + 30) - glowa.X) > 0 && (polozenieZakretow[i].X - (glowa.X + 30)) < 0) || ((polozenieOgona.X - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].X + 30) - glowa.X) > 0)) { return true; }
+                            if ((((polozenieOgona.X + 30) - glowa.X) > 0 && (polozenieZakretow[i].X - (glowa.X + 30)) < 0)) { return true; }
+                            if ((polozenieOgona.X - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].X + 30) - glowa.X) > 0) { return true; }
                         }
                     }
                     else
                     {
                         if (polozenieZakretow[i + 1].X == polozenieZakretow[i].X && polozenieZakretow[i + 1].X == glowa.X)
                         {
-                            if ((((polozenieZakretow[i + 1].Y + 30) - glowa.Y) > 0 && (polozenieZakretow[i].Y - (glowa.Y + 30)) < 0) || ((polozenieZakretow[i + 1].Y - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].Y + 30) - glowa.Y) > 0)) { return true; }
+                            if ((((polozenieZakretow[i + 1].Y + 30) - glowa.Y) > 0 && (polozenieZakretow[i].Y - (glowa.Y + 30)) < 0)) { return true; }
+                            if ((polozenieZakretow[i + 1].Y - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].Y + 30) - glowa.Y) > 0) { return true; }
                         }
                         if (polozenieZakretow[i + 1].Y == polozenieZakretow[i].Y && polozenieZakretow[i + 1].Y == glowa.Y)
                         {
-                            if ((((polozenieZakretow[i + 1].X + 30) - glowa.X) > 0 && (polozenieZakretow[i].X - (glowa.X + 30)) < 0) || ((polozenieZakretow[i + 1].X - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].X + 30) - glowa.X) > 0)) { return true; }
+                            if ((((polozenieZakretow[i + 1].X + 30) - glowa.X) > 0 && (polozenieZakretow[i].X - (glowa.X + 30)) < 0)) { return true; }
+                            if ((polozenieZakretow[i + 1].X - (glowa.Y + 30)) < 0 && ((polozenieZakretow[i].X + 30) - glowa.X) > 0) { return true; }
                         }
                     }
                 }
