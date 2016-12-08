@@ -332,6 +332,7 @@ namespace Snake
             jablko.Inittialize(waz.Poleznia());
             kierunek = 3;
             isGameOver = false;
+            score = 0;
         }
 
         public void ZMenuDoOpcji()
