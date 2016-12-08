@@ -28,20 +28,11 @@ namespace Snake
         public SpriteFont font;
         private Snake waz;
         private Apple jablko;
-        private Texture2D tlo_Gry;
         int kierunek;
         public InputHelper helper = new InputHelper();
         public static int score = 0;
-        bool IsPaused = true;
-        bool IsMusic = true;
-        private int kierunekTeraz;
-        private int kierunekNowy;
-        string test;
-        string testint;
-        private GraphicsDeviceManager graphics;
-        private Texture2D jablkoTextura;
-        private StringBuilder sb;
         private List<HighScore> HighList;
+        private int speed;
 
         string ListLoad;
 
@@ -193,7 +184,7 @@ namespace Snake
                     kierunek = SnakeControl();
                     if (waz.Kierunek != kierunek)
                     {
-                        if (czas.Milliseconds % 1500 == 0)
+                        if (czas.Milliseconds % speed == 0)
                         {
                             if (waz.ChangeDirection(kierunek) == true /*|| waz.CzyWSiebie() == true*/)
                             {
@@ -203,7 +194,7 @@ namespace Snake
                     }
                     else
                     {
-                        if (czas.Milliseconds % 1500 == 0)
+                        if (czas.Milliseconds % speed == 0)
                         {
                             if (waz.Move() == true /*|| waz.CzyWSiebie() == true*/)
                             {
