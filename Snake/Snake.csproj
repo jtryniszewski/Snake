@@ -69,10 +69,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Apple.cs" />
+    <Compile Include="FileManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GUIElement.cs" />
+    <Compile Include="GUIHighScore.cs" />
     <Compile Include="GUITextElement.cs" />
+    <Compile Include="HighScore.cs" />
+    <Compile Include="InputHelper.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

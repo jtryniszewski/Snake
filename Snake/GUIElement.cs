@@ -13,36 +13,34 @@ namespace Snake
     class GUIElement
     {
         protected int x, y;
-        private Texture2D GUITexture;
-        private Rectangle GUIRect;
-        public readonly string wpisywanaNazwa;
-        private Action _metoda;
+        protected Texture2D GUITexture;
+        protected Rectangle GUIRect;
+        public readonly string WpisywanaNazwa;
+        protected Action _metoda;
         public SpriteFont font;
-        protected int elementHeight;
-        protected int elementWidth;
-        //public delegate void KliknietyElement(string element);
-        //public event KliknietyElement klawisz;
-        public GUIElement(string wpisywanaNazwa,int x, int y, Action metoda, ContentManager content/*, int screenWidth, int screenHeight, */)
+        protected int ElementHeight;
+        protected int ElementWidth;
+
+        public GUIElement(string WpisywanaNazwa, int x, int y, Action metoda, ContentManager content/*, int screenWidth, int screenHeight, */)
         {
-            
-            
-            this.wpisywanaNazwa = wpisywanaNazwa;
+
+
+            this.WpisywanaNazwa = WpisywanaNazwa;
             this.x = x;
             this.y = y;
             this._metoda = metoda;
-            if (wpisywanaNazwa != null)
+            if (WpisywanaNazwa != null)
             {
-                GUITexture = content.Load<Texture2D>(wpisywanaNazwa);
-                elementWidth = GUITexture.Width;
-                elementHeight = GUITexture.Height;
+                GUITexture = content.Load<Texture2D>(WpisywanaNazwa);
+                ElementWidth = GUITexture.Width;
+                ElementHeight = GUITexture.Height;
             }
-            GUIRect = new Rectangle(0, 0, elementWidth, elementHeight);
+            GUIRect = new Rectangle(0, 0, ElementWidth, ElementHeight);
             Centrowanie(760, 1360);
-            //ScaleToFitScreen(screenHeight, screenWidth);
             RuszanieEl(x, y);
         }
 
-        public void Sprawdzanie()
+        public virtual void Sprawdzanie()
         {
             if (GUIRect.Contains(new Point(Mouse.GetState().X, Mouse.GetState().Y)) && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
@@ -63,14 +61,14 @@ namespace Snake
 
         private Rectangle GetRect(int height, int width)
         {
-            return new Rectangle((width / 2) - (elementWidth / 2), (height / 2) - (elementHeight / 2), elementWidth, elementHeight);
+            return new Rectangle((width / 2) - (ElementWidth / 2), (height / 2) - (ElementHeight / 2), ElementWidth, ElementHeight);
         }
 
         public void RuszanieEl(int x, int y)
         {
             GUIRect = new Rectangle(GUIRect.X += x, GUIRect.Y += y, GUIRect.Width, GUIRect.Height);
         }
-      
+
 
 
     }

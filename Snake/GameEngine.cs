@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Storage;
 using System.Threading;
+using System.IO;
 
 namespace Snake
 {
@@ -29,6 +30,20 @@ namespace Snake
         private Apple jablko;
         private Texture2D tlo_Gry;
         int kierunek;
+        public InputHelper helper = new InputHelper();
+        public static int score = 0;
+        bool IsPaused = true;
+        bool IsMusic = true;
+        private int kierunekTeraz;
+        private int kierunekNowy;
+        string test;
+        string testint;
+        private GraphicsDeviceManager graphics;
+        private Texture2D jablkoTextura;
+        private StringBuilder sb;
+        private List<HighScore> HighList;
+
+        string ListLoad;
 
         //--------------------------------------------------------------------------------------------
         #region metody statyczne
@@ -57,7 +72,22 @@ namespace Snake
         {
             return new GUITextElement(null, Xpos, Ypos, action, contentManager, spriteBatch, text);/*screenWidth, screenHeight*/
         }
+        //private GUIElement getGUIHighScore(int Xpos, int Ypos, Action action)
+        //{
+        //    return new GUIHighScore(null, Xpos, Ypos, action, contentManager, spriteBatch, string.Empty, HighList);
+        //}
+        private GUIElement getGUIHighScore(string ButtonName, int Xpos, int Ypos, Action action)
+        {
+            return new GUIHighScore(ButtonName, Xpos, Ypos, action, contentManager, spriteBatch, string.Empty, HighList);
+        }
 
+        private List<GUIElement> GetGame()
+        {
+            return new List<GUIElement>()
+            {
+               getGUIElement("GameBackGround", 0, 0, null),
+            };
+        }
 
         private List<GUIElement> GetMainMenu()
         {
@@ -68,7 +98,7 @@ namespace Snake
                 getGUIElement("Exit",270,300,()=>Exit()),
                 getGUIElement("Options",-270,300,()=>ZMenuDoOpcji()),
                 getGUIElement("High",235,150,()=>ZMenuDoHigh()),
-                getGUIElement("Snake1360",60,-100,null), 
+                getGUIElement("Snake1360",60,-100,null),
             };
         }
 
@@ -85,10 +115,11 @@ namespace Snake
         {
             return new List<GUIElement>()
             {
-                getGUIElement("background",0,0,null),
+               getGUIElement("background",0,0,null),
                 getGUIElement("return",-200,-300,()=>wroc()),
                 getGUITextElement(200,200,null,"Player Name:"),
-                getGUITextElement(800,200,null,"High Score:")
+                getGUITextElement(800,200,null,"Score:"),
+                getGUITextElement(360,300,null,ListLoad),
             };
 
         }
@@ -108,9 +139,41 @@ namespace Snake
             return new List<GUIElement>()
             {
                 getGUIElement("PausedBackground",0,0,null),
-                getGUIElement("resume",200,0,()=>Resume()),
-                getGUIElement("mainmenu",-200,0,()=>PauseToMenu())
+                getGUIElement("resume",0,20,()=>Resume()),
+                getGUIElement("mainmenu",0,-125,()=>PauseToMenu())
             };
+        }
+        private List<GUIElement> GetGameOver()
+        {
+
+            return new List<GUIElement>()
+            {
+                getGUIElement("gamebackground", 0, 0, null),
+                getGUIElement("GameOverBack",0,0,null),
+                getGUIElement("NewHigh",0,0,null),
+                //getGUIElement("SAVE",0,150,()=>HSToGameOver()),
+                getGUIHighScore("Save",440,375,()=>HSToGameOver())//440,375
+            };
+        }
+        private List<GUIElement> GetOver()
+        {
+
+            return new List<GUIElement>()
+            {
+                getGUIElement("gamebackground", 0, 0, null),
+                getGUIElement("GameOverBack",0,0,null),
+                getGUIElement("return",-250,20,()=>wroc()),
+                getGUIElement("retry",250,20,()=>ZmEnuDoGry()),
+                getGUITextElement(750,225,null,score.ToString()),
+            };
+        }
+        private List<GUIElement> GetScore()
+        {
+            return new List<GUIElement>()
+            {
+                getGUITextElement(10,0,null,"Score:"),
+                getGUITextElement(220, 0, null, score.ToString())
+        };
         }
         #endregion
 
@@ -130,9 +193,9 @@ namespace Snake
                     kierunek = SnakeControl();
                     if (waz.Kierunek != kierunek)
                     {
-                        if(czas.Milliseconds %1500==0)
+                        if (czas.Milliseconds % 1500 == 0)
                         {
-                            if(waz.ChangeDirection(kierunek) == true /*|| waz.CzyWSiebie() == true*/)
+                            if (waz.ChangeDirection(kierunek) == true /*|| waz.CzyWSiebie() == true*/)
                             {
                                 isGameOver = true;
                             }
@@ -142,20 +205,38 @@ namespace Snake
                     {
                         if (czas.Milliseconds % 1500 == 0)
                         {
-                            if(waz.Move()==true /*|| waz.CzyWSiebie() == true*/)
+                            if (waz.Move() == true /*|| waz.CzyWSiebie() == true*/)
                             {
                                 isGameOver = true;
                             }
                         }
                     }
+
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
                     isPause = false;
                 }
+                if (isGameOver == true)
+                {
+                    int LowestScore = HighList.Min(z => z.points);
+                    if (score > LowestScore)
+                    {
+                        czyMenu = true;
+                        menu = new Menu(this, GetGameOver());
+
+
+                    }
+                    else
+                    {
+                        czyMenu = true;
+                        menu = new Menu(this, GetOver());
+                    }
+                }
                 if (CzyJablko(waz.GlowaPolozenie, jablko.ApplePosition) == true)
                 {
                     waz.Add();
+                    score += 10;
                     jablko.RandomPositionApple(waz.Poleznia());
                 }
             }
@@ -191,7 +272,15 @@ namespace Snake
             }
             else
             {
-                spriteBatch.Draw(tlo_Gry, new Rectangle(0, 0, 1360, 768), Color.White);
+                foreach (GUIElement element in GetGame())
+                {
+                    element.Rysowanie(spriteBatch);
+                }
+                foreach (GUIElement element in GetScore())
+                {
+                    element.Rysowanie(spriteBatch);
+                    element.Sprawdzanie();
+                }
                 waz.Draw(spriteBatch);
                 jablko.Draw(spriteBatch);
             }
@@ -204,6 +293,14 @@ namespace Snake
                     element.Sprawdzanie();
                 }
             }
+            if (GUIHighScore.CzyEnter2 == true)
+            {
+                czyMenu = true;
+                menu = new Menu(this, GetOver());
+                GUIHighScore.CzyEnter2 = false;
+                GUIHighScore.CzyEnter = false;
+
+            }
         }
 
         #endregion
@@ -211,6 +308,11 @@ namespace Snake
         //--------------------------------------------------------------------------------------------
 
         #region puaza w grze
+        public void HSToGameOver()
+        {
+
+            GUIHighScore.CzyEnter = true;
+        }
         public void PauseToMenu()
         {
             czyMenu = true;
@@ -265,6 +367,7 @@ namespace Snake
 
         public void ZMenuDoHigh()
         {
+            ListLoad = File.ReadAllText("HighScore.txt");
             menu = new Menu(this, GetHighMenu());
         }
         public void wroc()
@@ -282,9 +385,46 @@ namespace Snake
         {
             contentManager = content;
             czyMenu = true;
+            HighList = new List<HighScore>();
+            string path = "HighScore.txt";
+            string tmp;
+            string line;
+            string[] posplicie;
+            if (!File.Exists(path) || new FileInfo("Highscore.txt").Length == 0)
+            {
+
+                StreamWriter sw = new System.IO.StreamWriter("HighScore.txt");
+                HighList.Add(new HighScore { nick = "PLAYER1", points = 0 });
+                HighList.Add(new HighScore { nick = "PLAYER2", points = 2 });
+                HighList.Add(new HighScore { nick = "PLAYER3", points = 5 });
+                HighList.Add(new HighScore { nick = "PLAYER4", points = 7 });
+                HighList.Add(new HighScore { nick = "PLAYER5", points = 15 });
+                HighList = HighList.OrderByDescending(z => z.points).ToList();
+                foreach (HighScore element in HighList)
+                {
+                    tmp = element.nick + "                  " + element.points.ToString();
+                    sw.WriteLine(tmp);
+
+                }
+                sw.Close();
+                //ListLoad = File.ReadAllText(path);
+            }
+            else
+            {
+                StreamReader sr = new StreamReader(path);
+                //while ((line = sr.ReadLine().ToString()) != null)
+                for (int i = 0; i < 5; i++)
+                {
+                    line = sr.ReadLine().ToString();
+                    posplicie = line.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    HighList.Add(new HighScore { nick = posplicie[0].ToString(), points = Int32.Parse(posplicie[1]) });
+                }
+                sr.Close();
+
+            }
             menu = new Menu(this, GetMainMenu());
             this.spriteBatch = spriteBatch;
-            tlo_Gry = content.Load<Texture2D>("tlo_snake");
+            
         }
         //---------------------------------------------------------------------
 

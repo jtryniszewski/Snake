@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,22 +12,22 @@ namespace Snake
 {
     class GUITextElement : GUIElement
     {
-        private string text;
-        public GUITextElement(string WpisywanaNazwa, int x, int y, Action metoda, ContentManager content, SpriteBatch spriteBatch, string text,int elementheight=100,int elementwidth=100) : base(WpisywanaNazwa, x, y, metoda, content)
+
+
+        //w konstruktorze referencja do listy
+        protected string text;
+        public GUITextElement(string WpisywanaNazwa, int x, int y, Action metoda, ContentManager content, SpriteBatch spriteBatch, string text) : base(WpisywanaNazwa, x, y, metoda, content)
         {
             this.text = text;
-            this.elementHeight = elementheight;
-            this.elementWidth = elementwidth;
             this.font = content.Load<SpriteFont>("HighScore");
         }
-        public void pisanie(SpriteBatch spriteBatch, string tekst)
-        {
-            spriteBatch.DrawString(font, tekst, new Vector2(x, y), Color.White);
-        }
-        public override void Rysowanie(SpriteBatch spriteBatch)
+        public void pisanie(SpriteBatch spriteBatch, string text)
         {
             pisanie(spriteBatch, text);
         }
-
+        public override void Rysowanie(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawString(font, text, new Vector2(x, y), Color.White);
+        }
     }
 }
